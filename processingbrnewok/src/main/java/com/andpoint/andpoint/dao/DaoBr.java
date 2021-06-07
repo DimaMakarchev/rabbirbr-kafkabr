@@ -2,7 +2,6 @@ package com.andpoint.andpoint.dao;
 
 import com.andpoint.andpoint.model.OrderBR;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public interface DaoBr {
@@ -13,11 +12,10 @@ public interface DaoBr {
     void saveDateINDBBR(List<OrderBR> orderBRList);
 
     /*update*/
-    void updateDBBR(OrderBR orderBR);
+    void updateDBBR(String name,int id);
 
     /*getAll*/
-    ArrayList<OrderBR> selectAll();
+    List<OrderBR> selectAll(List<Integer> id);
 
-    /*getOnID*/
     OrderBR selectONId();
 }

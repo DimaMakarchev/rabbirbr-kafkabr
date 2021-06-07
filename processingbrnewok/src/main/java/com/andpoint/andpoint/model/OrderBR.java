@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 
 @Data
-@AllArgsConstructor
+//@AllArgsConstructor
 @NoArgsConstructor
 public class OrderBR {
     private Integer id;
@@ -15,5 +15,10 @@ public class OrderBR {
     private BigDecimal cost;
     private Status status;
 
+    public OrderBR(Integer id, String name, BigDecimal cost) {
+        this.id = id;
+        this.name = name;
+        this.cost = cost;
+    }
 }
 

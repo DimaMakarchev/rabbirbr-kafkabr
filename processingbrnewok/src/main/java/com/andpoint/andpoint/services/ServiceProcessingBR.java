@@ -11,7 +11,9 @@ import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.cloud.stream.messaging.Sink;
 import org.springframework.integration.annotation.MessageEndpoint;
 
+import java.math.BigDecimal;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 @EnableBinding(Sink.class)
@@ -31,6 +33,12 @@ public class ServiceProcessingBR {
     @StreamListener(Sink.INPUT)
     public void methodGet(OrderBR orderBR) {
         daoBr.saveDateINDBBR(Collections.singletonList(orderBR));
+
+        daoBr.updateDBBR("BRO coooooooollllllll1111111111", 2);
+
+        List<OrderBR> orderBRS = daoBr.selectAll(List.of(1, 2, 3));
+        orderBRS.forEach(System.out::println);
+
 
         if (SET_INT.contains(orderBR.getId())) {
             methodStatusOK(orderBR);

@@ -1,10 +1,13 @@
 package com.andpoint.andpoint.dao;
 
 import com.andpoint.andpoint.model.OrderBR;
+import com.andpoint.andpoint.model.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,17 +41,27 @@ public class DaoBrImpl implements DaoBr {
     }
 
     @Override
-    public void updateDBBR(OrderBR orderBR) {
-
+    @Transactional
+    public void updateDBBR(String name,int id) {
+        jdbcTemplate.update("update bro set name = ? where id = ? ",
+                name,id);
     }
 
     @Override
-    public ArrayList<OrderBR> selectAll() {
-        return null;
+    public List<OrderBR> selectAll(List<Integer> ids) {
+        return jdbcTemplate.query("select * from bro WHERE id IN (?,?,?)",
+                ids.toArray(),(rs, rowNum)->new OrderBR(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getBigDecimal("cost")
+                        ));
+
+
     }
 
     @Override
     public OrderBR selectONId() {
         return null;
     }
+
 }
