@@ -22,7 +22,7 @@ public class ServiceOrderBR {
     @Scheduled(fixedRate = 3000)
     public void methodSend() {
         Random random=new Random();
-        OrderBR bro_car = new OrderBR(random.nextInt(10), "BRO car", new BigDecimal(1111.12), null);
+        OrderBR bro_car = new OrderBR(random.nextInt(10), "BRO car"+random.nextInt(10), new BigDecimal(1111.12), Status.OK);
         logger.info(bro_car.toString());
         source.output().send(MessageBuilder.withPayload(bro_car).build());
     }

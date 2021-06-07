@@ -23,14 +23,16 @@ public class DaoBrImpl implements DaoBr {
                 "    name varchar(50)    not null default 'BRODEFAULT',\n" +
                 "    cost decimal(10, 0) not null default 0.00,\n" +
                 "    status enum('ok','no') not null default 'no',\n" +
-                "    birthday DATETIME DEFAULT CURRENT_TIMESTAMP  );\n");
+                "    birthday DATETIME DEFAULT CURRENT_TIMESTAMP ,\n" +
+                "   \n" +
+                "    index  name_index_search (name));\n");
     }
 
     @Override
     public void saveDateINDBBR(List<OrderBR> orderBRList) {
         orderBRList.stream().forEach(orderBR -> {
             jdbcTemplate.update("insert into bro(name,cost,status) values (?,?,?)",
-                   orderBR.getName(), orderBR.getCost(),String.valueOf(orderBR.getStatus())) ;
+                    orderBR.getName(), orderBR.getCost(), String.valueOf(orderBR.getStatus()));
         });
 
     }

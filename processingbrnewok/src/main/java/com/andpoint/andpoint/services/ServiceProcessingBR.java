@@ -11,6 +11,7 @@ import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.cloud.stream.messaging.Sink;
 import org.springframework.integration.annotation.MessageEndpoint;
 
+import java.util.Collections;
 import java.util.Set;
 
 @EnableBinding(Sink.class)
@@ -18,8 +19,19 @@ import java.util.Set;
 public class ServiceProcessingBR {
     private static final Set<Integer> SET_INT = Set.of(1, 2, 7, 9);
 
+//    @Qualifier("daoBrImpl")
+    @Autowired
+    private DaoBrImpl daoBr;
+
+    public ServiceProcessingBR(DaoBrImpl daoBr) {
+        this.daoBr=daoBr;
+        daoBr.creatDBBR();
+    }
+
     @StreamListener(Sink.INPUT)
     public void methodGet(OrderBR orderBR) {
+        daoBr.saveDateINDBBR(Collections.singletonList(orderBR));
+
         if (SET_INT.contains(orderBR.getId())) {
             methodStatusOK(orderBR);
         } else {
