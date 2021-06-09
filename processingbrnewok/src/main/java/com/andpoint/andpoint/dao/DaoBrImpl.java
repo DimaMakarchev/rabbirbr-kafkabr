@@ -3,7 +3,9 @@ package com.andpoint.andpoint.dao;
 import com.andpoint.andpoint.model.OrderBR;
 import com.andpoint.andpoint.model.Status;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.ColumnMapRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +18,15 @@ public class DaoBrImpl implements DaoBr {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+    private RowMapper<OrderBR> orderBRRowMapper = (rs, rowNum) -> {
+
+        return new OrderBR(
+                rs.getInt("id"),
+                rs.getString("name"),
+                rs.getBigDecimal("cost")
+        );
+
+    };
 
     @Override
     public void creatDBBR() {
@@ -42,26 +53,25 @@ public class DaoBrImpl implements DaoBr {
 
     @Override
     @Transactional
-    public void updateDBBR(String name,int id) {
+    public void updateDBBR(String name, int id) {
         jdbcTemplate.update("update bro set name = ? where id = ? ",
-                name,id);
+                name, id);
     }
 
     @Override
+//    @Transactional(readOnly = true)
+//            jdbcTemplate.queryForList())
     public List<OrderBR> selectAll(List<Integer> ids) {
-        return jdbcTemplate.query("select * from bro WHERE id IN (?,?,?)",
-                ids.toArray(),(rs, rowNum)->new OrderBR(
-                        rs.getInt("id"),
-                        rs.getString("name"),
-                        rs.getBigDecimal("cost")
-                        ));
+        String sql = "select * from bro WHERE id IN (?,?,?)";
+        return jdbcTemplate.query(sql,
+                ids.toArray(), orderBRRowMapper);
 
 
     }
 
     @Override
     public OrderBR selectONId() {
-        return null;
+        return jdbcTemplate.queryForObject("select * from bro  where id = 3",
+                orderBRRowMapper);
     }
-
 }
